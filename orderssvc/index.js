@@ -12,7 +12,6 @@ const queueUrl = "SQS_QUEUE_URL";
 const port = process.argv.slice(2)[0];
 const app = express();
 
-
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
@@ -21,39 +20,47 @@ app.get('/', (req, res) => {
 
 app.post('/order', (req, res) => {
 
+    let orderData = {
+        'userEmail': req.body['userEmail'],
+        'itemName': req.body['itemName'],
+        'itemPrice': req.body['itemPrice'],
+        'itemsQuantity': req.body['itemsQuantity']
+    }
+
     let sqsOrderData = {
         MessageAttributes: {
           "userEmail": {
             DataType: "String",
-            StringValue: req.body['userEmail']
+            StringValue: orderData.userEmail
           },
           "itemName": {
             DataType: "String",
-            StringValue: req.body['itemName']
+            StringValue: orderData.itemName
           },
           "itemPrice": {
             DataType: "Number",
-            StringValue: req.body['itemPrice']
+            StringValue: orderData.itemPrice
           },
           "itemsQuantity": {
             DataType: "Number",
-            StringValue: req.body['itemsQuantity']
+            StringValue: orderData.itemsQuantity
           }
         },
-        MessageBody: `Order data for user: ${req.body['userEmail']}`,
+        MessageBody: JSON.stringify(orderData),
         MessageDeduplicationId: req.body['userEmail'],
         MessageGroupId: "UserOrders",
         QueueUrl: queueUrl
-      };
+    };
 
     // send the order data to the SQS queue
     let sendSqsMessage = sqs.sendMessage(sqsOrderData).promise();
     
     sendSqsMessage.then((data) => {
-        console.log("Success", data.MessageId);
+        console.log(`OrdersSvc | SUCCESS: ${data.MessageId}`);
         res.send("Thank you for your order. Check you inbox for the confirmation email.");
     }).catch((err) => {
-        console.log("Error", err);
+        console.log(`OrdersSvc | ERROR: ${err}`);
+        // send email to emails API
         res.send("We ran into an error. Please try again.");        
     });
 });
