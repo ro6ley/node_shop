@@ -2,7 +2,7 @@
 
 # NodeShop
 
-This repository contains the code for this [blogpost]().
+This repository contains the code for this [blogpost](https://stackabuse.com/message-queueing-in-node-js-with-aws-sqs/).
 
 ## Getting Started
 
