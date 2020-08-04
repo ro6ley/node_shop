@@ -17,7 +17,7 @@ Kindly ensure you have the following installed on your machine:
 
 ### Running the Application
 
-1. Clone the repository
+1. Clone the repository and check out to the `sqs-sns` branch.
 ```
 $ git clone https://github.com/ro6ley/node_shop.git
 ```
@@ -37,26 +37,28 @@ $ npm install
 $ aws configure
 ```
 
-5. Create queue on AWS SQS dashboard and add queue URL to `./orderssvc/index.js` and `./emailssvc/index.js` under `queueUrl` variable.
+5. Create queue on AWS SQS dashboard and add queue URL to `./orderssvc/index.js` and `./smssvc/index.js` under `queueUrl` variable.
 
-4. Start the Services
+6. Create a topic on AWS SNS
+
+7. Start the Services
 
 ```
 $ npm start
 ```
 
-5. Navigate to http://localhost:8081/order and place an order. Sample
+8. Navigate to http://localhost:8081/order and place an order. Sample
 
 ```
 {
-	"itemName": "Phone case",
+	"itemName": "Phone cases",
 	"itemPrice": "10",
-	"userEmail": "randomuser@gmail.com",
+	"userPhone": "+254722...",
 	"itemsQuantity": "2"
 }
 ```
 
-6. Check `randomuser@gmail.com` mail inbox for order confirmation.
+9. The phone number provided should receive the order confirmation via SMS after a few seconds.
 
 
 ## Contribution
