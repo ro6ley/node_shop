@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start-orders-svc": "node ./orderssvc/index.js 8081",
-    "start-emails-svc": "node ./emailssvc/index.js",
-    "start": "npm-run-all -p -r start-orders-svc start-emails-svc"
+    "start-sms-svc": "node ./smssvc/index.js",
+    "start": "npm-run-all -p -r start-orders-svc start-sms-svc"
   },
   "keywords": [
     "node",
