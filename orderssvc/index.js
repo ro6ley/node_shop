@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 app.post('/order', (req, res) => {
 
     let orderData = {
-        'userEmail': req.body['userEmail'],
+        'userPhone': req.body['userPhone'],
         'itemName': req.body['itemName'],
         'itemPrice': req.body['itemPrice'],
         'itemsQuantity': req.body['itemsQuantity']
@@ -29,9 +29,9 @@ app.post('/order', (req, res) => {
 
     let sqsOrderData = {
         MessageAttributes: {
-          "userEmail": {
+          "userPhone": {
             DataType: "String",
-            StringValue: orderData.userEmail
+            StringValue: orderData.userPhone
           },
           "itemName": {
             DataType: "String",
@@ -47,7 +47,7 @@ app.post('/order', (req, res) => {
           }
         },
         MessageBody: JSON.stringify(orderData),
-        MessageDeduplicationId: req.body['userEmail'],
+        MessageDeduplicationId: req.body['userPhone'],
         MessageGroupId: "UserOrders",
         QueueUrl: queueUrl
     };
@@ -57,10 +57,9 @@ app.post('/order', (req, res) => {
     
     sendSqsMessage.then((data) => {
         console.log(`OrdersSvc | SUCCESS: ${data.MessageId}`);
-        res.send("Thank you for your order. Check you inbox for the confirmation email.");
+        res.send("Thank you for your order. Check you phone for an SMS with the confirmation details.");
     }).catch((err) => {
         console.log(`OrdersSvc | ERROR: ${err}`);
-        // send email to emails API
         res.send("We ran into an error. Please try again.");        
     });
 });
